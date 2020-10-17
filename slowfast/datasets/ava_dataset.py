@@ -401,7 +401,7 @@ class Ava(torch.utils.data.Dataset):
             for label in box_labels:
                 if label == -1:
                     continue
-                assert label >= 1 and label <= 80
+                assert label >= 0 and label <= 80
                 label_arrs[i][label - 1] = 1
 
         imgs = utils.pack_pathway_output(self.cfg, imgs)

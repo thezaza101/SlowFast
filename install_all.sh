@@ -8,5 +8,6 @@ conda install -y -c anaconda zeromq
 conda install -y -c conda-forge yacs
 conda install -y -c conda-forge imutils
 conda install -y -c conda-forge simplejson
+conda install -y -c pytorch pytorch
 conda install -y pytorch torchvision cudatoolkit=10.1 -c pytorch
 python -m pip install detectron2 -f https://dl.fbaipublicfiles.com/detectron2/wheels/cu101/torch1.6/index.html

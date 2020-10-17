@@ -3,13 +3,14 @@
 
 import logging
 import os
+import sys
 from collections import defaultdict
 from fvcore.common.file_io import PathManager
 
 logger = logging.getLogger(__name__)
 
 FPS = 30
-AVA_VALID_FRAMES = range(902, 1799)
+AVA_VALID_FRAMES = range(0, 59)
 
 
 def load_image_lists(cfg, is_train):
@@ -133,7 +134,7 @@ def get_keyframe_data(boxes_and_labels):
         0: 900
         30: 901
         """
-        return (sec - 900) * FPS
+        return (sec) * FPS
 
     keyframe_indices = []
     keyframe_boxes_and_labels = []
@@ -194,6 +195,7 @@ def parse_bboxes_file(
     count = 0
     unique_box_count = 0
     for filename, is_gt_box in zip(ann_filenames, ann_is_gt_box):
+       
         with PathManager.open(filename, "r") as f:
             for line in f:
                 row = line.strip().split(",")
@@ -203,8 +205,8 @@ def parse_bboxes_file(
                     score = float(row[7])
                     if score < detect_thresh:
                         continue
-
-                video_name, frame_sec = row[0], int(row[1])
+                                    
+                video_name, frame_sec = (row[0], int(row[1]))
                 if frame_sec % boxes_sample_rate != 0:
                     continue
 
@@ -217,14 +219,17 @@ def parse_bboxes_file(
                     all_boxes[video_name] = {}
                     for sec in AVA_VALID_FRAMES:
                         all_boxes[video_name][sec] = {}
+                
+                try:
+                    if box_key not in all_boxes[video_name][frame_sec]:
+                        all_boxes[video_name][frame_sec][box_key] = [box, []]
+                        unique_box_count += 1
 
-                if box_key not in all_boxes[video_name][frame_sec]:
-                    all_boxes[video_name][frame_sec][box_key] = [box, []]
-                    unique_box_count += 1
-
-                all_boxes[video_name][frame_sec][box_key][1].append(label)
-                if label != -1:
-                    count += 1
+                    all_boxes[video_name][frame_sec][box_key][1].append(label)
+                    if label != -1:
+                        count += 1
+                except:
+                    print('Shit!')
 
     for video_name in all_boxes.keys():
         for frame_sec in all_boxes[video_name].keys():
