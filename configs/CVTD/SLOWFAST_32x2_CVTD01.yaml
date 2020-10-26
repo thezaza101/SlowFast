@@ -20,7 +20,7 @@ DETECTION:
 AVA:
   BGR: False
   DETECTION_SCORE_THRESH: 0.8
-  TEST_PREDICT_BOX_LISTS: ["person_box_67091280_iou90/ava_detection_val_boxes_and_labels.csv"]
+  TEST_PREDICT_BOX_LISTS: ["test.csv"]
   TRAIN_GT_BOX_LISTS: ["train.csv"]
   LABEL_MAP_FILE: cvtd_action_list_v1.pbtxt
   EXCLUSION_FILE: CVTD_val_excluded_timestamps.csv
@@ -53,7 +53,7 @@ SOLVER:
   WEIGHT_DECAY: 1e-7
   OPTIMIZING_METHOD: sgd
 MODEL:
-  NUM_CLASSES: 80
+  NUM_CLASSES: 8
   ARCH: slowfast
   MODEL_NAME: SlowFast
   LOSS_FUNC: bce
@@ -66,7 +66,7 @@ TEST:
 DATA_LOADER:
   NUM_WORKERS: 1
   PIN_MEMORY: True
-NUM_GPUS: 1
+NUM_GPUS: 8
 NUM_SHARDS: 1
 RNG_SEED: 0
 OUTPUT_DIR: .
