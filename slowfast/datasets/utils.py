@@ -38,7 +38,7 @@ def retry_load_images(image_paths, retry=10, backend="pytorch"):
 
         if all(img is not None for img in imgs):
             if backend == "pytorch":
-                imgs = torch.as_tensor(np.stack(imgs))
+                imgs = torch.as_tensor(np.stack(imgs))/255
             return imgs
         else:
             logger.warn("Reading failed. Will retry.")
